@@ -1,0 +1,46 @@
+version: '3.9'
+
+services:
+  web:
+    image: lesta_app
+    container_name: lesta_analyzer
+    command: runserver 0.0.0.0:8000
+    ports:
+      - 8000:8000
+    env_file:
+      - ./.env.dev
+    depends_on:
+      - migrate
+
+  db:
+    image: postgres:17
+    container_name: analyzer_db
+    restart: always
+    env_file:
+      - ./.env.db
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  migrate:
+    image: lesta_app
+    command: migrate
+    env_file:
+      - ./.env.dev
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: on-failure
+
+
+
+
+
+
+
+
+

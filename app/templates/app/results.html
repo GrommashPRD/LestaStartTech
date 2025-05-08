@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Результаты анализа</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/results.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">Результаты анализа</h1>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Слово</th>
+                    <th>TF</th>
+                    <th>IDF</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for word, tf, idf in page_obj %}
+                <tr>
+                    <td>{{ word }}</td>
+                    <td>{{ tf }}</td>
+                    <td>{{ idf }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="pagination justify-content-center">
+            {% for num in page_range %}
+            {% if num == page_obj.number %}
+            <span class="page-number active">{{ num }}</span>
+            {% else %}
+            <a class="page-number" href="?page={{ num }}">{{ num }}</a>
+            {% endif %}
+            {% endfor %}
+        </div>
+
+        <a class="back-link" href="{% url 'upload_document' %}">Загрузить новый документ</a>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
